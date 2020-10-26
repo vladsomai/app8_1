@@ -9,8 +9,8 @@ private:
 
 	 shared_ptr<node> root = make_shared<node>();
 	 shared_ptr<node> actual = make_shared<node>();
-	 static bool dataIsFound;
-	 static int searchedNumber;
+	  bool dataIsFound;
+	  int searchedNumber;
 	
 
 public:
@@ -18,11 +18,11 @@ public:
 
 	void insertNode();
 
-	void searchNode(shared_ptr<node> actual);
+	void searchNode(shared_ptr<node>);
 
 	//void SupriMin();
 
-	//void Suprima();
+	void Suprima(shared_ptr<node>);
 
 	//functia de afisare a nodului prin metoda inordine - vom afisa toate nodurile crescator(proiectia nodurilor), am creat aceasta functie pentru verificare chiar daca nu este in cerintele problemei
 	void printBinaryTree(shared_ptr<node> actual);
@@ -30,10 +30,13 @@ public:
 
 	shared_ptr<node> getRoot() { return this->root; }
 
-	void setSearchedNumber();
-	int getSearchedNumber();
+
+	//functionalitatile de mai jos sunt necesare pentru implementarea functiei de cautare.
+	void setSearchedNumber() { cout << "Introduceti numarul cautat: "; cin >> this->searchedNumber; }
+	int getSearchedNumber() { return this->searchedNumber; }
 
 	void setDataIsFound() { this->dataIsFound = true; }
+	void resetDataIsFound() { this->dataIsFound = false; }
 	bool getDataIsFound() { return dataIsFound; }
 
 	//constructor pentru a initializa radacina si nodul actual la null 
@@ -46,25 +49,13 @@ public:
 	}
 };
 
-void binaryTree::setSearchedNumber()
-{
-	cout << "Introduceti numarul cautat: ";
-	cin >> this->searchedNumber;
 
-}
-
-
-int binaryTree::getSearchedNumber()
-{
-	return this->searchedNumber;
-
-}
 //functia de afisare a arborelui, vom folosi recursivitate pentru a intra in adancimea arborelui, vom folosi tehnica de traversare inordine
 void binaryTree::printBinaryTree(shared_ptr<node> actual)
 {
 	
 
-	if (this->root == NULL)
+	if (this->root == nullptr)
 	{
 		printf("\nArborele este gol!\tIntroduceti un nod.\n");
 		return;
@@ -100,7 +91,7 @@ void binaryTree::printBinaryTree(shared_ptr<node> actual)
 		*/
 
 
-		if (actual->getLeft() != NULL)
+		if (actual->getLeft() != nullptr)
 		{
 			this->printBinaryTree(actual->getLeft());
 		}
@@ -108,7 +99,7 @@ void binaryTree::printBinaryTree(shared_ptr<node> actual)
 
 		cout << actual->getData()<<"\t";
 
-		if (actual->getRight() != NULL)
+		if (actual->getRight() != nullptr)
 		{
 			this->printBinaryTree(actual->getRight());
 		}
@@ -122,9 +113,9 @@ void binaryTree::printBinaryTree(shared_ptr<node> actual)
 void binaryTree::insertNode()
 {
 
-	int data;//variabila locala pentru a captura data nodului.
+	int data;//variabila locala pentru a captura data(cheia) nodului, o vom declara doar atunci cand dorim sa folosim functia de insertie.
 
-	//in cazul in care radacina arborelui nu este definita, o cream si introducem un numar
+	//in cazul in care radacina arborelui nu este definita, o cream si introducem un numar, aici este practic implementata functia de "creare", fara acest pas arborele nostru este null.
 	if (this->root == nullptr)
 	{
 		printf("Arborele este gol, introduceti radacina: \n");
@@ -207,7 +198,7 @@ void binaryTree::insertNode()
 /*
 Functia de cautare functioneaza la fel ca si functia de afisare,
 in cazul in care am ajuns la un nod cu numarul pe care il cautam,
-vom seta un flag global cu numarul de la nod si il vom afisa din main
+vom seta un flag global(al arborelui) si il vom afisa din main, pentru aceasta am folosit variabila "dataIsFound"
 
 */
 void binaryTree::searchNode(shared_ptr<node> actual)
@@ -215,7 +206,7 @@ void binaryTree::searchNode(shared_ptr<node> actual)
 
 
 
-	if (this->root == NULL)
+	if (this->root == nullptr)
 	{
 		printf("\nArborele este gol!\tIntroduceti un nod.\n");
 		return;
@@ -226,9 +217,9 @@ void binaryTree::searchNode(shared_ptr<node> actual)
 
 
 
-		if (actual->getLeft() != NULL)
+		if (actual->getLeft() != nullptr)
 		{
-			this->printBinaryTree(actual->getLeft());
+			this->searchNode(actual->getLeft());
 		}
 
 
@@ -237,84 +228,65 @@ void binaryTree::searchNode(shared_ptr<node> actual)
 			this->dataIsFound = true;
 		}
 
-		if (actual->getRight() != NULL)
+		if (actual->getRight() != nullptr)
 		{
-			this->printBinaryTree(actual->getRight());
+			this->searchNode(actual->getRight());
 		}
 	}
 
 
 }
-
 
 /*
 pentru a suprima un nod din arbore, va trebui sa cautam nodul dupa care executam stergerea doar daca nodul nu impacteaza ABO.
 
+*/
 
-struct node* suprima(struct node* root, int searchedNumber)
+void binaryTree::Suprima(shared_ptr<node> actual)
 {
 
 
-	if (root == NULL)
+
+	if (this->root == nullptr)
 	{
-		printf("\nArborele / nodul este gol!\n");
-		return root;
+		printf("\nArborele este gol!\tIntroduceti radacina.\n");
+		return;
+
 	}
-
-	if (root->left != NULL)
-	{
-		suprima(root->left, searchedNumber);
-	}
-
-
-
-	if (root->data == searchedNumber)
+	else
 	{
 
-		printf("Am gasit numarul in arbore: %d.\tVom efectua stergerea... ", searchedNumber);
 
 
-		//daca unul din fi este nul, putem efectua stergerea(XOR)
-
-		//operatia de xor pentru a afla daca unul in fi este null
-		if ((root->left == NULL) && (root->right == NULL))
+		if (actual->getLeft() != nullptr)
 		{
-			printf("Nodul nu are fii\n");
-			root = NULL;
-			return root;
+			this->Suprima(actual->getLeft());
 		}
 
-
-		if ((root->left != NULL) != (root->right != NULL))
+		//daca am ajuns la nodul cu numarul pe care dorim sa il stergem
+		if (actual->getData() == this->searchedNumber)
 		{
 
+			cout << "Am gasit numarul" << endl;
 
-			if (root->left != NULL)
-			{
-				root = root->left;
-				return root;
-			}
-			if (root->right != NULL)
-			{
-				root = root->right;
-				return root;
-			}
+
+
 
 		}
 
-		//searchFlag = root->data;
-	}
-
-
-
-	if (root->right != NULL)
-	{
-		suprima(root->right, searchedNumber);
+		if (actual->getRight() != nullptr)
+		{
+			this->Suprima(actual->getRight());
+		}
 	}
 
 
 }
 
+
+
+
+/*
 void supriMin(struct node* root)
 {
 

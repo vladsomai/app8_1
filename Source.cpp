@@ -15,9 +15,9 @@ Operatorul "Creeaza" l-am implementat in functia de insertie, pentru a fi mai us
 */
 
 
-
-bool binaryTree::dataIsFound=false;
-int binaryTree::searchedNumber = 0;
+//declaram variabilele statice ale clasei binaryTree in unitatea de translatie in care este definit si main()
+//bool binaryTree::dataIsFound;
+//int binaryTree::searchedNumber;
 
 
 int main()
@@ -57,10 +57,12 @@ int main()
 			break;
 
 		case 3:
+			//dam un numar pentru cautare
 			binaryTree1->setSearchedNumber();
 
 			binaryTree1->searchNode(binaryTree1->getRoot());
 
+			//daca variabila "DataIsFound" a fost setata pe true atunci am gasit numarul
 			if (binaryTree1->getDataIsFound())
 			{
 				cout << "Succes! Numarul "<<binaryTree1->getSearchedNumber()<<" a fost gasit in arbore\n";
@@ -69,6 +71,9 @@ int main()
 			{
 				cout << "Eroare! Numarul " << binaryTree1->getSearchedNumber() << " nu a fost gasit in arbore\n";
 			}
+
+			//dupa ce am apelat functia de cautare, resetam variabila.
+			binaryTree1->resetDataIsFound();
 			break;
 
 		case 4:
@@ -76,7 +81,9 @@ int main()
 			break;
 
 		case 5:
-		//	 binaryTree1->Suprima();
+		    binaryTree1->setSearchedNumber();
+		    binaryTree1->Suprima(binaryTree1->getRoot());
+
 			break;
 
 		default:
