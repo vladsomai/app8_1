@@ -32,7 +32,9 @@ public:
 	void setLeft(shared_ptr<node> newLeftNode);
 	void setRight(shared_ptr<node> newRightNode);
 	
-	
+
+	shared_ptr<node> returnTheRightNode(shared_ptr<node> actual) { return actual->getRight(); }
+	shared_ptr<node> returnTheLeftNode(shared_ptr<node> actual) { return actual->getLeft(); }
 	
 	//constructor pentru initializarea variabileleor cu 0  si null in cazul crearii unui nod.
 	node()

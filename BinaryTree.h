@@ -39,6 +39,8 @@ public:
 
 
 
+
+
 	//constructor pentru a initializa radacina si nodul actual la null 
 	binaryTree()
 	{
@@ -48,6 +50,9 @@ public:
 		this->actual = nullptr;
 	}
 };
+
+
+
 
 
 //functia de afisare a arborelui, vom folosi recursivitate pentru a intra in adancimea arborelui, vom folosi tehnica de traversare inordine
@@ -127,6 +132,7 @@ void binaryTree::insertNode()
 		//alocam memorie pentru radacina folosind make_shared() in care se apeleaza si constructorul care initializeaza variabilele obiectului cu 0 si nullptr(data, left, right)
 		this->root = make_shared<node>();
 		cin >> data;
+		
 		this->root->setData(data);//setam data(cheia) radacinii cu numarul introdus din obiectul "cin".
 
 	}
@@ -134,6 +140,14 @@ void binaryTree::insertNode()
 	//in cazul in care radacina este deja definita o vom folosii pentru a crea ramurile si frunzele arborelui 
 	else
 	{
+
+
+
+
+
+
+
+
 		printf("\nIntroduceti un numar in arbore: ");
 
 
@@ -201,11 +215,17 @@ void binaryTree::insertNode()
 
 		}
 
+
+
+
+
+
+
+
+
 	}
 
 }
-
-
 
 /*
 Functia de cautare functioneaza la fel ca si functia de afisare,
@@ -254,7 +274,6 @@ void binaryTree::searchNode(shared_ptr<node> actual)
 
 /*
 pentru a suprima un nod din arbore, va trebui sa cautam nodul dupa care executam stergerea doar daca nodul nu impacteaza ABO.
-
 */
 
 void binaryTree::Suprima(shared_ptr<node> actual)
@@ -350,6 +369,194 @@ void binaryTree::Suprima(shared_ptr<node> actual)
 
 			}
 
+
+
+
+
+
+
+
+			shared_ptr<node> greatestNodeInLeftSubtree = make_shared<node>();
+			shared_ptr<node> smallestNodeInRightSubtree = make_shared<node>();
+			shared_ptr<node> temporary = make_shared<node>();
+
+
+			//caz3 - ambii fii sunt diferiti de null
+			if (actual->getLeft() != nullptr && actual->getRight() != nullptr)
+			{
+
+
+
+				//cautam cel mai mare nod din subarborele stang
+				if (actual->getLeft()->getRight() != nullptr)
+				{
+
+					greatestNodeInLeftSubtree = actual->getLeft()->getRight();
+
+
+					while (greatestNodeInLeftSubtree != nullptr)
+					{
+
+						greatestNodeInLeftSubtree = greatestNodeInLeftSubtree->getRight();
+
+					}
+
+					//daca cel mai mare nod din subarborele stang are un nod atasat in stanga lui vom renunta la el
+					if (greatestNodeInLeftSubtree->getLeft() != nullptr)
+					{
+
+						cout << "\nInlocuirea cu cel mai mare nod din subarborele stang nu poate avea loc deoarece arborele nu va ramane binary ordonat...\t Vom incepe verificarea cu subarborele drept\n";
+
+					}
+					else
+					{
+						//in cazul in care nodul cel mai mare este fezabil(are nodul stang null), il vom pune in locul nodului ce trebuie sters
+
+						if (actual == root)//pentru radacina
+						{
+							root->setData(greatestNodeInLeftSubtree->getData()); //inlocuim cheia din radacina cu cea mai mare valoare gasita.
+							cout << "Am schimbat radacina cu " << root->getData() << endl;
+							greatestNodeInLeftSubtree = nullptr; // stergem nodul cel mai mare
+							return;
+						}
+						else //pentru un nod oarecare
+						{
+
+							actual->setData(greatestNodeInLeftSubtree->getData());
+							cout << "Am schimbat nodul cu " << actual->getData() << endl;
+
+							greatestNodeInLeftSubtree = nullptr;
+							return;
+						}
+					}
+
+				}
+				else
+				{
+
+					//daca ajungem aici inseamna ca nodul fezabil pentru inlocuire este posibil sa fie cel din stanga, doar in cazul in care acesta nu are nod in dreapta
+					if (actual->getLeft()->getRight() == nullptr)
+					{
+
+						temporary = actual->getRight();//nod temporar care sa retina adresa subarborelui din dreapta
+
+					   if (actual == root)
+					   {
+					    	root = root->getLeft();
+							root->setRight(temporary);
+							cout << "Am schimbat radacina cu " << root->getData() << endl;
+
+							return;
+
+					   }
+					   else
+					   {
+
+						   actual = actual->getLeft();
+						   actual->setRight(temporary);
+						   cout << "Am schimbat nodul cu " << actual->getData() << endl;
+
+						   return;
+
+					   }
+
+					}
+
+				}
+
+
+
+
+
+
+				//-----------------------------------------------------------------------------------------------
+
+
+			    //cautam cel mai mic nod din subarborele drept
+				if (actual->getRight()->getLeft() != nullptr)
+				{
+
+					smallestNodeInRightSubtree = actual->getRight()->getLeft();
+
+
+					while (smallestNodeInRightSubtree != nullptr)
+					{
+
+						smallestNodeInRightSubtree = smallestNodeInRightSubtree->getLeft();
+
+					}
+
+					//daca cel mai mic nod din subarborele drep are un nod atasat in dreapta lui, vom renunta la el
+					if (smallestNodeInRightSubtree->getRight() != nullptr)
+					{
+
+						cout << "\nInlocuirea cu cel mai mic nod din subarborele drept nu poate avea loc deoarece arborele nu va ramane binary ordonat...\t vom renunta la stergrea acestui nod.\n";
+						return;
+					}
+					else
+					{
+						//in cazul in care nodul cel mai mic este fezabil(are nodul drept null), il vom pune in locul nodului ce trebuie sters
+
+						if (actual == root)//pentru radacina
+						{
+							root->setData(smallestNodeInRightSubtree->getData()); //inlocuim cheia din radacina cu cea mai mare valoare gasita.
+
+							cout << "Am schimbat radacina cu " << root->getData() << endl;
+							smallestNodeInRightSubtree = nullptr; // stergem nodul cel mai mare
+							return;
+						}
+						else //pentru un nod oarecare
+						{
+
+							actual->setData(smallestNodeInRightSubtree->getData());
+							smallestNodeInRightSubtree = nullptr;
+							cout << "Am schimbat nodul cu " << actual->getData() << endl;
+
+							return;
+						}
+					}
+
+				}
+				else
+				{
+					
+					//daca ajungem aici inseamna ca nodul fezabil pentru inlocuire este posibil sa fie cel din dreapta, doar in cazul in care acesta nu are nod in stanga
+					if (actual->getRight()->getLeft() == nullptr)
+					{
+
+						temporary = actual->getLeft();//nod temporar care sa retina adresa subarborelui din stanga
+
+						if (actual == root)
+						{
+
+							root = root->getRight();
+							root->setLeft(temporary);
+							cout << "Am schimbat radacina cu " << root->getData() << endl;
+							return;
+
+						}
+						else
+						{
+
+							actual = actual->getRight();
+							actual->setLeft(temporary);
+
+							cout << "Am schimbat nodul cu " << actual->getData() << endl;
+
+							return;
+
+						}
+
+					}
+
+				}
+
+
+				//in cazul in care ajungem cu executia aici, inseamna ca nu am gasit nici un nod valid pentru inlocuirea celui ce trebuie sters
+				cout << "\nNu am gasit nici un nod disponibil pentru al inlocui pe cel sters.\n";
+
+			}
+
 		}
 
 
@@ -361,7 +568,6 @@ void binaryTree::Suprima(shared_ptr<node> actual)
 		}
 
 	}
-
 
 }
 
@@ -375,3 +581,7 @@ void supriMin(struct node* root)
 
 }
 */
+
+
+
+
