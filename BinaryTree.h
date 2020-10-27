@@ -7,8 +7,8 @@ class binaryTree
 {
 private:
 
-	 shared_ptr<node> root = make_shared<node>();
-	 shared_ptr<node> actual = make_shared<node>();
+	  shared_ptr<node> root;
+	  shared_ptr<node> actual;
 	  bool dataIsFound;
 	  int searchedNumber;
 	
@@ -16,16 +16,14 @@ private:
 public:
 
 
+	//-------------------FUNCTIILE ARBORELUI---------------------------
 	void insertNode();
-
 	void searchNode(shared_ptr<node>);
-
 	//void SupriMin();
-
 	void Suprima(shared_ptr<node>);
+	void printBinaryTree(shared_ptr<node> actual);//functia de afisare a nodului prin metoda inordine - vom afisa toate nodurile crescator(proiectia nodurilor), am creat aceasta functie pentru verificare chiar daca nu este in cerintele problemei
+	//-----------------------------------------------------------------
 
-	//functia de afisare a nodului prin metoda inordine - vom afisa toate nodurile crescator(proiectia nodurilor), am creat aceasta functie pentru verificare chiar daca nu este in cerintele problemei
-	void printBinaryTree(shared_ptr<node> actual);
 
 
 	shared_ptr<node> getRoot() { return this->root; }
@@ -38,6 +36,8 @@ public:
 	void setDataIsFound() { this->dataIsFound = true; }
 	void resetDataIsFound() { this->dataIsFound = false; }
 	bool getDataIsFound() { return dataIsFound; }
+
+
 
 	//constructor pentru a initializa radacina si nodul actual la null 
 	binaryTree()
@@ -57,6 +57,7 @@ void binaryTree::printBinaryTree(shared_ptr<node> actual)
 
 	if (this->root == nullptr)
 	{
+
 		printf("\nArborele este gol!\tIntroduceti un nod.\n");
 		return;
 
@@ -93,18 +94,20 @@ void binaryTree::printBinaryTree(shared_ptr<node> actual)
 
 		if (actual->getLeft() != nullptr)
 		{
-			this->printBinaryTree(actual->getLeft());
-		}
 
+			this->printBinaryTree(actual->getLeft());
+
+		}
 
 		cout << actual->getData()<<"\t";
 
 		if (actual->getRight() != nullptr)
 		{
+
 			this->printBinaryTree(actual->getRight());
+
 		}
 	}
-
 
 }
 
@@ -118,12 +121,14 @@ void binaryTree::insertNode()
 	//in cazul in care radacina arborelui nu este definita, o cream si introducem un numar, aici este practic implementata functia de "creare", fara acest pas arborele nostru este null.
 	if (this->root == nullptr)
 	{
+
 		printf("Arborele este gol, introduceti radacina: \n");
 
 		//alocam memorie pentru radacina folosind make_shared() in care se apeleaza si constructorul care initializeaza variabilele obiectului cu 0 si nullptr(data, left, right)
 		this->root = make_shared<node>();
 		cin >> data;
 		this->root->setData(data);//setam data(cheia) radacinii cu numarul introdus din obiectul "cin".
+
 	}
 
 	//in cazul in care radacina este deja definita o vom folosii pentru a crea ramurile si frunzele arborelui 
@@ -149,7 +154,6 @@ void binaryTree::insertNode()
 		while (actual != nullptr)
 		{
 
-
 			//inseram nodul in stanga daca numarul introdus este mai mic sau egal cu cel existent
 			if ( newNode->getData() <= actual->getData() )
 			{
@@ -157,14 +161,18 @@ void binaryTree::insertNode()
 				//verificam daca insertia noului nod poate avea loc, daca nu poate avea loc, vom lua nodul actual si il vom itera pana cand gasim un nod cu loc liber
 				if (actual->getLeft() == nullptr)
 				{
+
 					//asignam nodul nou in arbore si iesim din functie.
 					actual->setLeft(newNode);
 					return;
+
 				}
 				else
 				{
+
 					//punem nodul actual la noua adresa nenula  (iteram in arbore)
 					actual = actual->getLeft();
+
 				}
 
 
@@ -172,18 +180,22 @@ void binaryTree::insertNode()
 			//inseram nodul in dreapta daca numarul introdus este strict mai mare cu cel existent
 			else if ( newNode->getData() > actual->getData() )
 			{
+
 				//verificam daca insertia noului nod poate avea loc, daca nu poate avea loc, vom lua nodul actual si il vom itera pana cand gasim un nod cu loc liber
 				if (actual->getRight() == nullptr)
 				{
+
 					//asignam nodul nou in arbore si iesim din functie.
 					actual->setRight(newNode);
 					return;
+
 				}
 				else
 				{
-					actual = actual->getRight();
-				}
 
+					actual = actual->getRight();
+
+				}
 
 			}
 
@@ -204,10 +216,9 @@ vom seta un flag global(al arborelui) si il vom afisa din main, pentru aceasta a
 void binaryTree::searchNode(shared_ptr<node> actual)
 {
 
-
-
 	if (this->root == nullptr)
 	{
+
 		printf("\nArborele este gol!\tIntroduceti un nod.\n");
 		return;
 
@@ -215,25 +226,29 @@ void binaryTree::searchNode(shared_ptr<node> actual)
 	else
 	{
 
-
-
 		if (actual->getLeft() != nullptr)
 		{
+
 			this->searchNode(actual->getLeft());
+
 		}
 
 
 		if (actual->getData() == this->searchedNumber)
 		{
+
 			this->dataIsFound = true;
+
 		}
 
 		if (actual->getRight() != nullptr)
 		{
-			this->searchNode(actual->getRight());
-		}
-	}
 
+			this->searchNode(actual->getRight());
+
+		}
+
+	}
 
 }
 
@@ -245,8 +260,6 @@ pentru a suprima un nod din arbore, va trebui sa cautam nodul dupa care executam
 void binaryTree::Suprima(shared_ptr<node> actual)
 {
 
-
-
 	if (this->root == nullptr)
 	{
 		printf("\nArborele este gol!\tIntroduceti radacina.\n");
@@ -256,28 +269,97 @@ void binaryTree::Suprima(shared_ptr<node> actual)
 	else
 	{
 
-
-
 		if (actual->getLeft() != nullptr)
 		{
+
 			this->Suprima(actual->getLeft());
+
 		}
 
+	
 		//daca am ajuns la nodul cu numarul pe care dorim sa il stergem
 		if (actual->getData() == this->searchedNumber)
 		{
-
-			cout << "Am gasit numarul" << endl;
-
+			this->dataIsFound = true;
 
 
+			//------------------------implementare caz1 si caz2 pentru radacina arborelui------------------------------
+            //caz1 verificam daca ambele noduri din dreapta / stanga sunt null
+			if (this->root->getLeft() == nullptr && this->root->getRight() == nullptr)
+			{
+
+				cout << "\nRadacina are ambii fii nullptr, stergem radacina" << endl;
+				this->root = nullptr;
+				return;
+
+			}
+
+
+
+			//caz2 verificam daca stanga sau dreapta este null
+			if (this->root->getLeft() == nullptr)
+			{
+
+				//daca nodul din stanga este null - > inseamna ca nodul din dreapta poate fi linkuit la arborele existent
+				cout << "\nNodul are fiul stang nullptr" << endl;
+				this->root = this->root->getRight();
+				return;
+
+			}
+			if (this->root->getRight() == nullptr)
+			{
+
+				cout << "\nNodul are fiul drept nullptr" << endl;
+				this->root = this->root->getLeft();
+				return;
+
+			}
+
+
+
+			//------------------------implementare caz1 si caz2 pentru un nod oarecare din arbore------------------------------
+
+			//caz1 verificam daca ambele noduri din dreapta / stanga sunt null
+			if (actual->getLeft() == nullptr || actual->getRight() == nullptr)
+			{
+			
+				cout << "\nNodul are ambii fii nullptr" << endl;
+				actual = nullptr;
+				return;
+
+			}
+
+
+
+			//caz2 verificam daca stanga sau dreapta este null
+			if (actual->getLeft() == nullptr)
+			{
+
+				//daca nodul din stanga este null - > inseamna ca nodul din dreapta poate fi linkuit la arborele existent
+				cout << "\nNodul are fiul stang nullptr" << endl;
+				actual = actual->getRight();
+				return;
+
+			}
+			if (actual->getRight() == nullptr)
+			{
+
+				cout << "\nNodul are fiul drept nullptr" << endl;
+				actual = actual->getLeft();
+				return;
+
+			}
 
 		}
+
 
 		if (actual->getRight() != nullptr)
 		{
+
 			this->Suprima(actual->getRight());
+
 		}
+
 	}
 
 

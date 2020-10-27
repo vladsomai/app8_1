@@ -54,6 +54,7 @@ int main()
 		case 2:
 			cout <<"\nArborele contine: \n";
 			binaryTree1->printBinaryTree(binaryTree1->getRoot());
+			cout << endl;
 			break;
 
 		case 3:
@@ -83,6 +84,20 @@ int main()
 		case 5:
 		    binaryTree1->setSearchedNumber();
 		    binaryTree1->Suprima(binaryTree1->getRoot());
+
+
+			//daca variabila "DataIsFound" a fost setata pe true atunci am gasit numarul
+			if (binaryTree1->getDataIsFound())
+			{
+				cout << "Succes! Numarul " << binaryTree1->getSearchedNumber() << " a fost sters din arbore\n";
+			}
+			else
+			{
+				cout << "Eroare! Numarul " << binaryTree1->getSearchedNumber() << " nu a fost gasit in arbore, stergerea nu poate avea loc\n";
+			}
+
+			//dupa ce am apelat functia de cautare, resetam variabila.
+			binaryTree1->resetDataIsFound();
 
 			break;
 
