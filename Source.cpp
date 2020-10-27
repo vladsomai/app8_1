@@ -15,9 +15,6 @@ Operatorul "Creeaza" l-am implementat in functia de insertie, pentru a fi mai us
 */
 
 
-//declaram variabilele statice ale clasei binaryTree in unitatea de translatie in care este definit si main()
-//bool binaryTree::dataIsFound;
-//int binaryTree::searchedNumber;
 
 
 int main()
