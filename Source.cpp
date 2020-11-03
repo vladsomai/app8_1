@@ -20,7 +20,8 @@ Operatorul "Creeaza" l-am implementat in functia de insertie, pentru a fi mai us
 int main()
 {
 	unique_ptr <binaryTree> binaryTree1 = make_unique<binaryTree>();
-
+	int searched = 0;
+	int toDelete = 0;
 	int optiune = 0;
 
 	do
@@ -56,7 +57,8 @@ int main()
 
 		case 3:
 			//dam un numar pentru cautare
-			binaryTree1->setSearchedNumber();
+			cout << "Introduceti numarul cautat: "; cin >> searched;
+			binaryTree1->setSearchedNumber(searched);
 
 			binaryTree1->searchNode(binaryTree1->getRoot());
 
@@ -75,25 +77,27 @@ int main()
 			break;
 
 		case 4:
-		//	binaryTree1->SupriMin();
+			binaryTree1->SupriMin();
 			break;
 
 		case 5:
-		    binaryTree1->setSearchedNumber();
-		    binaryTree1->Suprima(binaryTree1->getRoot());
+			
+			cout << "Introduceti numarul cautat: "; cin >> toDelete;
+		    binaryTree1->setSearchedNumber(toDelete);
+		    binaryTree1->deleteNode(binaryTree1->getRoot());
 
 
 			//daca variabila "DataIsFound" a fost setata pe true atunci am gasit numarul
 			if (binaryTree1->getDataIsFound())
 			{
-				cout << "Succes! Numarul " << binaryTree1->getSearchedNumber() << " a fost sters din arbore\n";
+				cout << "Succes! Numarul " << toDelete << " a fost sters din arbore\n";
 			}
 			else
 			{
-				cout << "Eroare! Numarul " << binaryTree1->getSearchedNumber() << " nu a fost gasit in arbore, stergerea nu poate avea loc\n";
+				cout << "Eroare! Numarul " << toDelete << " nu a fost gasit in arbore, stergerea nu poate avea loc\n";
 			}
 
-			//dupa ce am apelat functia de cautare, resetam variabila.
+			//dupa ce am apelat functia de stergere, resetam variabila.
 			binaryTree1->resetDataIsFound();
 
 			break;
