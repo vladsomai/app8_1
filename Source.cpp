@@ -11,15 +11,16 @@ utiliza metoda bazata pe pointeri
 Am realizat programul in C++ pentru o mai buna structurare a tipurilor de date si usurinta de a lucra cu fiecare obiect.
 
 Operatorul "Creeaza" l-am implementat in functia de insertie, pentru a fi mai usor de lucrat cu programul.
+La rularea programului vom insera automat noduri pentru verificari rapide.
 
 */
 
-
+shared_ptr<binaryTree> CreateBinTree();
 
 
 int main()
 {
-	unique_ptr <binaryTree> binaryTree1 = make_unique<binaryTree>();
+	shared_ptr<binaryTree> binaryTree1 = CreateBinTree();
 	int searched = 0;
 	int toDelete = 0;
 	int optiune = 0;
@@ -112,4 +113,21 @@ int main()
 
 
 	return 0;
+}
+
+
+shared_ptr<binaryTree> CreateBinTree()
+{
+	unique_ptr <binaryTree> binaryTree1 = make_unique<binaryTree>();
+
+	binaryTree1->insertNodeParam(2);
+	binaryTree1->insertNodeParam(5);
+	binaryTree1->insertNodeParam(6);
+	binaryTree1->insertNodeParam(7);
+	binaryTree1->insertNodeParam(9);
+	binaryTree1->insertNodeParam(10);
+	binaryTree1->insertNodeParam(13);
+
+	return binaryTree1;
+
 }

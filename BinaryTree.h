@@ -18,6 +18,7 @@ public:
 
 	//-------------------FUNCTIILE ARBORELUI---------------------------
 	void insertNode();
+	void insertNodeParam(int);
 	void searchNode(shared_ptr<node>);
 	void SupriMin();
 	void printBinaryTree(shared_ptr<node> actual);//functia de afisare a nodului prin metoda inordine - vom afisa toate nodurile crescator(proiectia nodurilor), am creat aceasta functie pentru verificare chiar daca nu este in cerintele problemei
@@ -49,9 +50,6 @@ public:
 	}
 
 };
-
-
-
 
 
 //functia de afisare a arborelui, vom folosi recursivitate pentru a intra in adancimea arborelui, vom folosi tehnica de traversare inordine
@@ -115,7 +113,6 @@ void binaryTree::printBinaryTree(shared_ptr<node> actual)
 	}
 
 }
-
 
 
 void binaryTree::insertNode()
@@ -210,6 +207,97 @@ void binaryTree::insertNode()
 
 }
 
+
+void binaryTree::insertNodeParam(int data)
+{
+
+
+	//in cazul in care radacina arborelui nu este definita, o cream si introducem un numar, aici este practic implementata functia de "creare", fara acest pas arborele nostru este null.
+	if (this->root == nullptr)
+	{
+
+		printf("Arborele este gol, introduceti radacina: \n");
+
+		//alocam memorie pentru radacina folosind make_shared() in care se apeleaza si constructorul care initializeaza variabilele obiectului cu 0 si nullptr(data, left, right)
+		this->root = make_shared<node>();
+
+		this->root->setData(data);//setam data(cheia) radacinii cu numarul introdus din obiectul "cin".
+
+	}
+
+	//in cazul in care radacina este deja definita o vom folosii pentru a crea ramurile si frunzele arborelui 
+	else
+	{
+
+		printf("\nIntroduceti un numar in arbore: ");
+
+		//cream un nou nod prin alocarea memoriei dinamic folosind make_shared() si ii atribuim o valoare in variabila "data"
+		shared_ptr<node> newNode = make_shared<node>();
+		newNode->setData(data);
+
+
+		//dupa crearea nodului urmeaza linkuirea cu radacina sau arborele deja existent
+
+
+		//pornim intotdeauna de la radacina
+		actual = this->root;
+
+
+		//vom itera nodurile pana cand gasim locuri disponibile pentru insertie, in cazul in care am ajuns la un nod null, ne oprim pentru ca am ajuns la capatul arborelui
+		while (actual != nullptr)
+		{
+
+			//inseram nodul in stanga daca numarul introdus este mai mic sau egal cu cel existent
+			if (newNode->getData() <= actual->getData())
+			{
+
+				//verificam daca insertia noului nod poate avea loc, daca nu poate avea loc, vom lua nodul actual si il vom itera pana cand gasim un nod cu loc liber
+				if (actual->getLeft() == nullptr)
+				{
+
+					//asignam nodul nou in arbore si iesim din functie.
+					actual->setLeft(newNode);
+					return;
+
+				}
+				else
+				{
+
+					//punem nodul actual la noua adresa nenula  (iteram in arbore)
+					actual = actual->getLeft();
+
+				}
+
+			}
+			//inseram nodul in dreapta daca numarul introdus este strict mai mare cu cel existent
+			else if (newNode->getData() > actual->getData())
+			{
+
+				//verificam daca insertia noului nod poate avea loc, daca nu poate avea loc, vom lua nodul actual si il vom itera pana cand gasim un nod cu loc liber
+				if (actual->getRight() == nullptr)
+				{
+
+					//asignam nodul nou in arbore si iesim din functie.
+					actual->setRight(newNode);
+					return;
+
+				}
+				else
+				{
+
+					actual = actual->getRight();
+
+				}
+
+			}
+
+		}
+
+	}
+
+}
+
+
 shared_ptr<node> binaryTree::cautaMinim(shared_ptr<node> actual)
 {
 
@@ -237,8 +325,6 @@ shared_ptr<node> binaryTree::cautaMinim(shared_ptr<node> actual)
 	return actual;
 
 }
-
-
 
 
 /*
@@ -286,10 +372,10 @@ void binaryTree::searchNode(shared_ptr<node> actual)
 
 }
 
+
 /*
 pentru a suprima un nod din arbore, va trebui sa cautam nodul dupa care executam stergerea doar daca nodul nu impacteaza ABO.
 */
-
 shared_ptr<node> binaryTree::deleteNode(shared_ptr<node> actual)
 {
 
@@ -422,8 +508,6 @@ shared_ptr<node> binaryTree::deleteNode(shared_ptr<node> actual)
 }
 
 
-
-
 //apelam functia de stergere cu parametrul nodului cel mai mic din arbore
 void binaryTree::SupriMin()
 {
@@ -437,8 +521,3 @@ void binaryTree::SupriMin()
 	deleteNode(this->cautaMinim(this->root));
 
 }
-
-
-
-
-
